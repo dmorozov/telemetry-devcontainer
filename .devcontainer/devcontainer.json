@@ -1,0 +1,80 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/go-postgres
+{
+	"name": "Go & PostgreSQL",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "telemetry-test-app",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+    "portsAttributes": {
+        "5432": {
+            "label": "Postgres SQL Server"
+        },
+        "7080": {
+            "label": "Demo server API HTTP"
+        },
+		"8080": {
+            "label": "Backend API HTTP"
+        },
+        "9090": {
+            "label": "Prometheus metrics"
+        },
+		"3000": {
+            "label": "Grafana metrics dashboard"
+        },
+        "16686": {
+            "label": "Jaeger telemetry"
+        },
+		"9411": {
+			"label": "Zipkin telemetry"
+		},
+		"4318": {
+			"label": "OpenTelemetry Collector"
+		},
+		"8888": {
+			"label": "OpenTelemetry Collector self metrics"
+		},
+		"8889": {
+			"label": "OpenTelemetry Collector Prometheus metrics"
+		},
+		"13133": {
+			"label": "OpenTelemetry Collector health_check"
+		},
+		"55679": {
+			"label": "OpenTelemetry Collector zPages"
+		},
+		"1888": {
+			"label": "OpenTelemetry Collector pprof"
+		}
+    },
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [
+		5432,
+		7080,
+		8080,
+		9090,
+		3000,
+		16686,
+		9411,
+		4318,
+		// otel collector ports
+		13133,
+		1888,
+		55679,
+		8888,
+		8889
+	]
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "go version",
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}

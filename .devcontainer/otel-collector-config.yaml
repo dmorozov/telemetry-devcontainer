@@ -1,0 +1,59 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:8317
+      http:
+        endpoint: 0.0.0.0:8318
+  zipkin:
+
+exporters:
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    const_labels:
+      label1: value1
+
+  debug:
+
+  zipkin:
+    endpoint: "http://telemetry-test-zipkin:9411/api/v2/spans"
+    format: proto
+
+  # ${env:JAEGER_HOST}:${env:JAEGER_PORT}
+  otlp:
+    endpoint: telemetry-test-jaeger:4317
+    tls:
+      insecure: true
+
+  logging:
+    verbosity: detailed
+
+processors:
+  batch:
+
+extensions:
+  health_check:
+#    endpoint: 0.0.0.0:13133
+  pprof:
+#    endpoint: 0.0.0.0:1888
+  zpages:
+#    endpoint: 0.0.0.0:55679
+
+service:
+  extensions: [pprof, zpages, health_check]
+  telemetry:
+    logs:
+      level: "debug"
+  pipelines:
+    traces:
+      receivers: [otlp, zipkin]
+      exporters: [logging, debug, otlp, zipkin]
+      processors: [batch]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging, debug, prometheus]
+    logs:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ logging ]
