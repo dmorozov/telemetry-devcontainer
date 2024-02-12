@@ -33,9 +33,10 @@ It doesn't show port forwarded in Devcontainer "Ports" panel (at the bottom of t
 
 ## References
 
-1. [OpenDelemetry Configuration documentation](https://opentelemetry.io/docs/collector/configuration/)
-2. [OpenTelemetry](https://github.com/open-telemetry) and [OpenTelemetry Collector Contrib](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main) projects.
-3. [Jaeger documentation](https://www.jaegertracing.io/docs/1.54/)
-4. [Zipkin documentation](https://zipkin.io/)
-5. [Prometheus documentation](https://prometheus.io/docs/prometheus/latest/getting_started/)
-6. [Grafana documentation](https://grafana.com/docs/grafana/latest/)
+1. [Developing inside a Container](https://code.visualstudio.com/docs/devcontainers/containers)
+2. [OpenDelemetry Configuration documentation](https://opentelemetry.io/docs/collector/configuration/)
+3. [OpenTelemetry](https://github.com/open-telemetry) and [OpenTelemetry Collector Contrib](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main) projects.
+4. [Jaeger documentation](https://www.jaegertracing.io/docs/1.54/)
+5. [Zipkin documentation](https://zipkin.io/)
+6. [Prometheus documentation](https://prometheus.io/docs/prometheus/latest/getting_started/)
+7. [Grafana documentation](https://grafana.com/docs/grafana/latest/)
