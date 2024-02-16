@@ -16,11 +16,11 @@ exporters:
   debug:
 
   zipkin:
-    endpoint: http://telemetry-test-zipkin:9411/api/v2/spans
+    endpoint: "http://telemetry-test-zipkin:9411/api/v2/spans"
     format: proto
 
   otlp:
-    endpoint: http://telemetry-test-jaeger:4317
+    endpoint: "http://telemetry-test-jaeger:4317"
     tls:
       insecure: true
 

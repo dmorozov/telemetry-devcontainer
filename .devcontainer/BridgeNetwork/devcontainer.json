@@ -4,7 +4,7 @@
 	"name": "Telemetry Template - Bridge Network",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "telemetry-test-app",
-	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	"workspaceFolder": "/workspaces",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},

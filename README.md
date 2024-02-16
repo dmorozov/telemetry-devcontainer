@@ -15,6 +15,10 @@ Please che [Devcontainer configuration](./.devcontainer/devcontainer.json) for t
 1. OpenTelemetry collector providing OpenTelemetry API.
 2. Jaeger and Zipkin to collect distributed traces (telemetry).
 3. Prometheus to collect metrics.
+4. Grafana default username/pwd: admin/admin
+5. Two different devcontainer with different network configurations:
+ - Bridged network - default in docker-compose
+ - DB network - default in devcontainers
 
 ## Limitations
 
