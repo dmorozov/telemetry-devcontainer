@@ -1,10 +1,11 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/go-postgres
 {
-	"name": "Go & PostgreSQL",
+	"name": "Telemetry Template - DB Network",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "telemetry-test-app",
-	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	//"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	"workspaceFolder": "/workspaces",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -34,15 +35,6 @@
 		"9411": {
 			"label": "Zipkin telemetry"
 		},
-		"4318": {
-			"label": "OpenTelemetry Collector"
-		},
-		"8888": {
-			"label": "OpenTelemetry Collector self metrics"
-		},
-		"8889": {
-			"label": "OpenTelemetry Collector Prometheus metrics"
-		},
 		"13133": {
 			"label": "OpenTelemetry Collector health_check"
 		},
@@ -63,13 +55,10 @@
 		3000,
 		16686,
 		9411,
-		4318,
 		// otel collector ports
 		13133,
 		1888,
-		55679,
-		8888,
-		8889
+		55679
 	]
 
 	// Use 'postCreateCommand' to run commands after the container is created.

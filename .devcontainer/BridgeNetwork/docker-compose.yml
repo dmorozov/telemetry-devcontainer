@@ -17,10 +17,6 @@ services:
     env_file:
         # Ensure that the variables in .env match the same variables in devcontainer.json
         - .env
-    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
-    # ports:
-    #   - "8080:8080"
-    #network_mode: service:telemetry-test-db
 
     volumes:
       - ../..:/workspaces:cached
@@ -43,14 +39,13 @@ services:
   telemetry-test-demo-server:
     build:
       dockerfile: Dockerfile
-      context: ../server
+      context: ../../server
     container_name: telemetry-test-demo-server
     restart: always
     environment:
-      - OTEL_EXPORTER_OTLP_ENDPOINT=telemetry-test-otel-collector:8317
+      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTELCOL_HOST}:${OTELCOL_PORT}
     ports:
       - "7080:7080"
-    #network_mode: service:telemetry-test-db
     depends_on:
       - telemetry-test-otel-collector
 
@@ -63,7 +58,6 @@ services:
       - "16686:16686"
       - "14268"
       - "14250"
-    #network_mode: service:telemetry-test-db
 
   # Zipkin
   telemetry-test-zipkin:
@@ -74,7 +68,6 @@ services:
     restart: always
     ports:
       - "9411:9411"
-    #network_mode: service:telemetry-test-db
 
   # Collector
   telemetry-test-otel-collector:
@@ -91,7 +84,6 @@ services:
       - "13133:13133" # health_check extension
       - "4317:4317"   # OTLP gRPC receiver
       - "55679:55679" # zpages extension
-    #network_mode: service:telemetry-test-db
     depends_on:
       - telemetry-test-jaeger
       - telemetry-test-zipkin
@@ -104,7 +96,6 @@ services:
       - ./prometheus.yaml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
-    #network_mode: service:telemetry-test-db
 
   telemetry-test-grafana:
     container_name: telemetry-test-grafana
@@ -112,4 +103,3 @@ services:
     image: grafana/grafana
     ports:
       - '3000:3000'
-    #network_mode: service:telemetry-test-db

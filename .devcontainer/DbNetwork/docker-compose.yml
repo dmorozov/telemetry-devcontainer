@@ -1,0 +1,109 @@
+version: '3.8'
+
+volumes:
+  postgres-data:
+
+services:
+  telemetry-test-app:
+    container_name: telemetry-test-app
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+        # Ensure that the variables in .env match the same variables in devcontainer.json
+        - .env
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+    network_mode: service:telemetry-test-db
+
+    volumes:
+      - ../..:/workspaces:cached
+      
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+  telemetry-test-db:
+    image: postgres:latest
+    container_name: telemetry-test-db
+    restart: unless-stopped
+    # ports:
+    #   - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    env_file:
+      # Ensure that the variables in .env match the same variables in devcontainer.json
+      - .env
+
+  telemetry-test-demo-server:
+    build:
+      dockerfile: Dockerfile
+      context: ../../server
+    container_name: telemetry-test-demo-server
+    restart: always
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTELCOL_HOST}:${OTELCOL_PORT}
+    # ports:
+    #   - "7080:7080"
+    network_mode: service:telemetry-test-db
+    depends_on:
+      - telemetry-test-otel-collector
+
+# Jaeger
+  telemetry-test-jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: telemetry-test-jaeger
+    restart: always
+    # ports:
+    #   - "16686:16686"
+    #   - "14268"
+    #   - "14250"
+    network_mode: service:telemetry-test-db
+
+  # Zipkin
+  telemetry-test-zipkin:
+    image: openzipkin/zipkin:latest
+    container_name: telemetry-test-zipkin
+    environment:
+      - JAVA_OPTS=-Xms1024m -Xmx1024m -XX:+ExitOnOutOfMemoryError
+    restart: always
+    # ports:
+    #   - "9411:9411"
+    network_mode: service:telemetry-test-db
+
+  # Collector
+  telemetry-test-otel-collector:
+    image: ${OTELCOL_IMG}
+    container_name: telemetry-test-otel-collector
+    restart: always
+    command: ["--config=/etc/otel-collector-config.yaml", "${OTELCOL_ARGS}"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    # ports:
+    #   - "1888:1888"   # pprof extension
+    #   - "8888:8888"   # Prometheus metrics exposed by the collector
+    #   - "8889:8889"   # Prometheus exporter metrics
+    #   - "13133:13133" # health_check extension
+    #   - "8317:4317"   # OTLP gRPC receiver
+    #   - "8318:4318"   # OTLP HTTP receiver
+    #   - "55679:55679" # zpages extension
+    network_mode: service:telemetry-test-db
+    depends_on:
+      - telemetry-test-jaeger
+      - telemetry-test-zipkin
+
+  telemetry-test-prometheus:
+    image: prom/prometheus:latest
+    container_name: telemetry-test-prometheus
+    restart: always
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yml
+    # ports:
+    #   - "9090:9090"
+    network_mode: service:telemetry-test-db
+
+  telemetry-test-grafana:
+    container_name: telemetry-test-grafana
+    restart: always
+    image: grafana/grafana
+    # ports:
+    #   - '3000:3000'
+    network_mode: service:telemetry-test-db
